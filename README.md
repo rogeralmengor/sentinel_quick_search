@@ -1,4 +1,6 @@
-# CLI 
+# CLI
+
+![alt text](01_cli.jpg) 
 
 CLI is a repository of command line interfaces to automate
 geoprocessing tasks. It utilizes the argparse library
@@ -10,6 +12,7 @@ script to execute the geoprocessing
 
 There is no installation required, but you have to be aware
 that there are certain packages that must be installed: 
+	
 	* numpy 
 	* geopandas 
 	* pandas
