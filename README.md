@@ -1,5 +1,5 @@
 # CLI
-<img src="01_cli.jpg" alt="drawing" width="200"/>
+<img src="01_cli.jpg" alt="drawing" width="450"/>
 
 CLI is a repository of command line interfaces to automate
 geoprocessing tasks. It utilizes the argparse library
