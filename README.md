@@ -12,12 +12,12 @@ script to execute the geoprocessing
 There is no installation required, but you have to be aware
 that there are certain packages that must be installed: 
 	
-	* numpy 
-	* geopandas 
-	* pandas
-	* scipy 
-	* GDAL 
-	* rasterio 
+* numpy 
+* geopandas 
+* pandas
+* scipy 
+* GDAL 
+* rasterio 
 
 ## Usage
 
