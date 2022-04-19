@@ -1,7 +1,5 @@
 # CLI
-
-![alt text](01_cli.jpg) 
-{:.some-css-class width="200"}
+<img src="01_cli.jpg" alt="drawing" width="200"/>
 
 CLI is a repository of command line interfaces to automate
 geoprocessing tasks. It utilizes the argparse library
