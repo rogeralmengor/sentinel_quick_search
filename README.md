@@ -1,4 +1,4 @@
-# CLI
+# GEOCLI
 <img src="01_cli.jpg" alt="drawing" width="250"/>
 
 CLI is a repository of command line interfaces to automate
