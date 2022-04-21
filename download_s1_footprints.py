@@ -7,11 +7,14 @@ Downloads footprints of sentinel-1 imagery
 AOI (Area of Interest)
 """
 
-import argparse 
+import argparse
+from re import I 
 import subprocess
 import geopandas as gpd 
 import os 
 import sys 
+from sentinelsat import SentinelAPI, read_geojson, geojson_to_wkt 
+from datetime import date
 
 
 def download_footprints_tile(aoi_geojson, path, orbit_direction, user, password, start, end): 
@@ -23,14 +26,14 @@ def download_footprints_tile(aoi_geojson, path, orbit_direction, user, password,
 
     product_type = "GRD"
     sentinel = "1"
-    subprocess.call(f"sentinelsat --geometry {aoi_geojson} \
+
+    subprocess.call(f"sentinelsat -geometry {aoi_geojson} \
                         -s {start} -e {end} \
                         -u {user} -p {password} \
                         --sentinel {sentinel} \
                         --path {path} \
                         --producttype {product_type} \
-                        --footprints \
-                        -q {orbit_direction}", shell=True)
+                        --footprints {path}", shell=True)
 
 def parseArguments(): 
     
@@ -75,19 +78,38 @@ def main():
     output_folder = args.of 
     input_path = args.ip
 
+    aoi_gdf = gpd.read_file(input_path).explode()[["geometry"]]
+    polygon_ = input_path.replace(".geojson", "_explode.geojson")
+    aoi_gdf.to_file(polygon_, driver = "GeoJSON") 
+
     try: 
         os.makedirs(output_folder)
 
     except Exception as e: 
         print(e)
-    import pdb; pdb.set_trace()
-    download_footprints_tile(input_path ,
-                            output_folder,
-                            orbit_direction,
-                            user_name,
-                            password,
-                            start_date,
-                            end_date)
+#    import pdb; pdb.set_trace()
+#    download_footprints_tile(aoi_gdf,
+#                            output_folder,
+#                            orbit_direction,
+#                            user_name,
+#                            password,
+#                            start_date,
+#                            end_date)
+
+    api = SentinelAPI(user_name, 
+                    password, 
+                    'https://apihub.copernicus.eu/apihub')
+
+
+    footprint = geojson_to_wkt(read_geojson(polygon_))
+
+    products = api.query(footprint, 
+                date=(start_date, end_date),
+                platformname='Sentinel-1')
     
+    products_gdf = api.to_geodataframe(products)
+
+    print(products_gdf)
+
 if __name__ == "__main__": 
     main() 
