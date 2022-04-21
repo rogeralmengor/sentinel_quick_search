@@ -12,7 +12,7 @@ from tkinter import W
 from tkinter.filedialog import askdirectory
 from tkinter import messagebox
 from tkinter import Tk
-
+from tkintermapview import TkinterMapView
 
 class Window(Frame):
 
@@ -106,6 +106,12 @@ class Window(Frame):
 
         self.run_button_frame.pack(side=TOP)
 
+
+        # Third view: Map View
+        self.map_widget = TkinterMapView(width=600, height=500, corner_radius=0)
+        self.map_widget.pack(side=TOP)
+         
+
     def browse_folder(self):
         
         """Command to browse folder."""
@@ -147,6 +153,6 @@ if __name__ == "__main__":
 
     ROOT = Tk()
     ROOT.title("Unzipping files")
-    ROOT.geometry("500x300")
+    ROOT.geometry("700x500")
     APP = Window(ROOT)
     ROOT.mainloop()
