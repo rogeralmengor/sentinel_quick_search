@@ -27,13 +27,13 @@ class Window(Frame):
         self.number_of_files = ""
 
 #        # Logo Frame
-#        path = "zip.gif"
-#        self.image = tk.PhotoImage(file=path)
-#        self.larger_image = self.image.zoom(2, 2)
-#        self.smaller_image = self.image.subsample(8, 8)
-#        self.logo = Label(
-#            master, image=self.smaller_image).pack(
-#            side=TOP, padx=5)
+        path = "sentinel_quick_search.gif"
+        self.image = tk.PhotoImage(file=path)
+        self.larger_image = self.image.zoom(2, 2)
+        self.smaller_image = self.image.subsample(8, 8)
+        self.logo = Label(
+            master, image=self.smaller_image).pack(
+            side=TOP, padx=5)
         
         self.black_space_00 = Label(master, text="").pack(side=TOP, padx=5)
         
