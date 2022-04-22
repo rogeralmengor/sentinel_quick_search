@@ -108,6 +108,7 @@ class Window(Frame):
 
 
         # Third view: Map View
+        self.canvas = Canvas(master, width=600, height=500)
         self.map_widget = TkinterMapView(width=600, height=500, corner_radius=0)
         self.map_widget.pack(side=TOP)
          
