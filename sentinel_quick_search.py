@@ -34,16 +34,21 @@ class Window(Frame):
 #        self.logo = Label(
 #            master, image=self.smaller_image).pack(
 #            side=TOP, padx=5)
-
-        #  Map View
-        self.canvas = Canvas(master, width=600, height=500, bg="black")
+        
+        self.black_space_00 = Label(master, text="").pack(side=TOP, padx=5)
+        
+        #  Map View and Map Functionalities
+        self.canvas = Canvas(master, width=800, height=500, bg="black", relief=SUNKEN)
         self.canvas.pack(side=TOP)
-        self.map_widget = TkinterMapView(self.canvas, width=300, height=200, corner_radius=0)
+        self.map_widget = TkinterMapView(self.canvas, width=600, height=350, corner_radius=0, relief=SUNKEN)
+        self.map_widget.add_right_click_menu_command(label = "Add Point",
+                                                    command = self.add_marker_event,
+                                                    pass_coords=True)
         self.map_widget.pack(side=TOP)
+        self.black_space_00_1 = Label(master, text="").pack(side=TOP, padx=5)
 
-
+        
         # Frame: browse folder
-
         self.search_folder_frame = Frame(master, width=150, height=30,
                                          relief=GROOVE, borderwidth=4)
 
@@ -150,6 +155,11 @@ class Window(Frame):
                 zip_obj = ZipFile(file, 'r')
                 zip_obj.extractall(self.folder)
                 print(f"extracted {file}\n{'-'*75}")
+
+
+    def add_marker_event(self, coords): 
+        print("Add marker:", coords)
+        new_marker = self.map_widget.set_marker(coords[0], coords[1], text = "new marker")
 
 
 if __name__ == "__main__":
