@@ -158,6 +158,11 @@ class Window(Frame):
                 zip_obj.extractall(self.folder)
                 print(f"extracted {file}\n{'-'*75}")
 
+    def update_path(self):
+
+        """Updates path based on coordinates stored as markers"""
+        self.map_widget.set_path(self.coordinates)
+
     def add_marker_event(self, coords):
         x = coords[0]
         y = coords[1] 
@@ -167,6 +172,7 @@ class Window(Frame):
         self.point_counter = self.point_counter + 1
         self.coordinates.append((x, y))
         print(self.coordinates)
+        self.update_path()
 
 
 if __name__ == "__main__":
