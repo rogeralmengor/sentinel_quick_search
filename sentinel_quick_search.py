@@ -25,7 +25,7 @@ class Window(Frame):
         self.folder = ""
         self.zip_files = []
         self.number_of_files = ""
-
+        self.coordinates = []
 #        # Logo Frame
 #        path = "sentinel_quick_search.gif"
 #        self.image = tk.PhotoImage(file=path)
@@ -157,9 +157,13 @@ class Window(Frame):
                 print(f"extracted {file}\n{'-'*75}")
 
 
-    def add_marker_event(self, coords): 
+    def add_marker_event(self, coords):
+        x = coords[0]
+        y = coords[1] 
         print("Add marker:", coords)
-        new_marker = self.map_widget.set_marker(coords[0], coords[1], text = "new marker")
+        new_marker = self.map_widget.set_marker(x, y, text = "new marker")
+        self.coordinates.append((x, y))
+        print(self.coordinates)
 
 
 if __name__ == "__main__":
