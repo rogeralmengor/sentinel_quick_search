@@ -13,6 +13,7 @@ from tkinter.filedialog import askdirectory
 from tkinter import messagebox
 from tkinter import Tk
 from tkintermapview import TkinterMapView
+from tkinter import * 
 
 class Window(Frame):
 
@@ -25,16 +26,23 @@ class Window(Frame):
         self.zip_files = []
         self.number_of_files = ""
 
-        # Logo Frame
-        path = "zip.gif"
-        self.image = tk.PhotoImage(file=path)
-        self.larger_image = self.image.zoom(2, 2)
-        self.smaller_image = self.image.subsample(8, 8)
-        self.logo = Label(
-            master, image=self.smaller_image).pack(
-            side=TOP, padx=5)
+#        # Logo Frame
+#        path = "zip.gif"
+#        self.image = tk.PhotoImage(file=path)
+#        self.larger_image = self.image.zoom(2, 2)
+#        self.smaller_image = self.image.subsample(8, 8)
+#        self.logo = Label(
+#            master, image=self.smaller_image).pack(
+#            side=TOP, padx=5)
 
-        # First frame: browse folder
+        #  Map View
+        self.canvas = Canvas(master, width=600, height=500, bg="black")
+        self.canvas.pack(side=TOP)
+        self.map_widget = TkinterMapView(self.canvas, width=300, height=200, corner_radius=0)
+        self.map_widget.pack(side=TOP)
+
+
+        # Frame: browse folder
 
         self.search_folder_frame = Frame(master, width=150, height=30,
                                          relief=GROOVE, borderwidth=4)
@@ -71,7 +79,7 @@ class Window(Frame):
 
         self.black_space_01 = Label(master, text="").pack(side=TOP, padx=5)
 
-        # Second Frame: number of files
+        # Frame: number of files
 
         self.number_files_frame = Frame(master, width=150, height=30,
                                         relief=GROOVE, borderwidth=4)
@@ -106,12 +114,6 @@ class Window(Frame):
 
         self.run_button_frame.pack(side=TOP)
 
-
-        # Third view: Map View
-        self.canvas = Canvas(master, width=600, height=500)
-        self.map_widget = TkinterMapView(width=600, height=500, corner_radius=0)
-        self.map_widget.pack(side=TOP)
-         
 
     def browse_folder(self):
         
@@ -153,7 +155,8 @@ class Window(Frame):
 if __name__ == "__main__":
 
     ROOT = Tk()
-    ROOT.title("Unzipping files")
+    ROOT.title("Sentinel Quick Search")
     ROOT.geometry("700x500")
+    ROOT.state('zoomed')
     APP = Window(ROOT)
     ROOT.mainloop()
