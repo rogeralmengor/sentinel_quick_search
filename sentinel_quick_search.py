@@ -12,7 +12,9 @@ from tkinter import W
 from tkinter.filedialog import askdirectory
 from tkinter import messagebox
 from tkinter import Tk
+import tkintermapview 
 from tkintermapview import TkinterMapView
+import math
 from tkinter import * 
 
 class Window(Frame):
@@ -26,6 +28,7 @@ class Window(Frame):
         self.zip_files = []
         self.number_of_files = ""
         self.coordinates = []
+        self.canvas_coordinates = []
         self.point_counter = 1 
 
 #       Logo Frame
@@ -46,6 +49,11 @@ class Window(Frame):
         self.map_widget.add_right_click_menu_command(label = "Add Point",
                                                     command = self.add_marker_event,
                                                     pass_coords=True)
+
+        self.map_widget.add_right_click_menu_command(label = "Create AOI",
+                                                    command = self.create_polygon,
+                                                    pass_coords=False)
+
         self.map_widget.pack(side=TOP)
         self.black_space_00_1 = Label(master, text="").pack(side=TOP, padx=5)
 
@@ -158,10 +166,24 @@ class Window(Frame):
                 zip_obj.extractall(self.folder)
                 print(f"extracted {file}\n{'-'*75}")
 
+
     def update_path(self):
 
         """Updates path based on coordinates stored as markers"""
+
         self.map_widget.set_path(self.coordinates)
+
+
+    def osm_to_decimal(self, tile_x: int, tile_y: int, zoom: int) -> tuple:
+        
+        """ converts internal OSM coordinates to decimal coordinates """
+
+        n = 2.0 ** zoom
+        lon_deg = tile_x / n * 360.0 - 180.0
+        lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * tile_y / n)))
+        lat_deg = math.degrees(lat_rad)
+        return lat_deg, lon_deg
+
 
     def add_marker_event(self, coords):
         x = coords[0]
@@ -170,9 +192,19 @@ class Window(Frame):
         self.map_widget.set_marker(x, y, text = "P" + "_" + \
                                             str(self.point_counter))
         self.point_counter = self.point_counter + 1
+        self.canvas_coordinates.append(self.osm_to_decimal(x,y,self.map_widget.zoom))
         self.coordinates.append((x, y))
         print(self.coordinates)
         self.update_path()
+
+
+    def create_polygon(self):
+        print("coordinates after transformation..")
+        if len(self.coordinates) < 3:
+            print("Cannot create polygon with less than three points..")
+        geo_coordinates = [item for t in self.coordinates for item in t]
+        print(geo_coordinates)
+        self.map_widget.canvas.create_polygon(geo_coordinates)
 
 
 if __name__ == "__main__":
