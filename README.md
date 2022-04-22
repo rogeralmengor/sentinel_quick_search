@@ -1,5 +1,5 @@
 # sentinel_quick_search 
-<img src="01_cli.jpg" alt="drawing" width="250"/>
+<img src="sentinel_quick_search_logo.jpg" alt="drawing" width="250"/>
 
 Search and download footprints of sentinel missions
 with an integrated map view

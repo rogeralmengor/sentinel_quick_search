@@ -167,7 +167,7 @@ class Window(Frame):
         x = coords[0]
         y = coords[1] 
         print("Add marker:", coords)
-        new_marker = self.map_widget.set_marker(x, y, text = "P" + "_" + \
+        self.map_widget.set_marker(x, y, text = "P" + "_" + \
                                             str(self.point_counter))
         self.point_counter = self.point_counter + 1
         self.coordinates.append((x, y))
