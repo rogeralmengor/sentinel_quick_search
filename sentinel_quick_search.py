@@ -202,9 +202,9 @@ class Window(Frame):
         print("coordinates after transformation..")
         if len(self.coordinates) < 3:
             print("Cannot create polygon with less than three points..")
-        geo_coordinates = [item for t in self.coordinates for item in t]
-        print(geo_coordinates)
-        self.map_widget.canvas.create_polygon(geo_coordinates)
+        #geo_coordinates = [item for t in self.coordinates for item in t]
+        #print(geo_coordinates)
+        self.map_widget.create_polygon(self.coordinates)
 
 
 if __name__ == "__main__":
