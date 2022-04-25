@@ -1,4 +1,5 @@
 import os
+from turtle import update
 from zipfile import ZipFile
 import tkinter as tk
 from tkinter import Frame
@@ -13,6 +14,7 @@ from tkinter.filedialog import askdirectory
 from tkinter import messagebox
 from tkinter import Tk
 import tkintermapview 
+import customtkinter
 from tkintermapview import TkinterMapView
 import math
 from tkinter import * 
@@ -167,11 +169,18 @@ class Window(Frame):
                 print(f"extracted {file}\n{'-'*75}")
 
 
-    def update_path(self):
+    def update_path(self, close_path=False):
 
         """Updates path based on coordinates stored as markers"""
-
-        self.map_widget.set_path(self.coordinates)
+        if close_path == True:
+            x = self.coordinates[0][0]
+            y = self.coordinates[0][1]
+            self.map_widget.set_marker(x, y) 
+            self.canvas_coordinates.append(self.osm_to_decimal(x,y,self.map_widget.zoom))
+            self.coordinates.append((x,y))
+            self.map_widget.set_path(self.coordinates)
+        else: 
+            self.map_widget.set_path(self.coordinates)
 
 
     def osm_to_decimal(self, tile_x: int, tile_y: int, zoom: int) -> tuple:
@@ -202,7 +211,11 @@ class Window(Frame):
         print("coordinates after transformation..")
         if len(self.coordinates) < 3:
             print("Cannot create polygon with less than three points..")
-        self.map_widget.set_polygon(self.coordinates)
+        else:
+            #import pdb; pdb.set_trace()
+            self.update_path(close_path=True) 
+            self.map_widget.set_polygon(self.coordinates)
+
 
 
 if __name__ == "__main__":
