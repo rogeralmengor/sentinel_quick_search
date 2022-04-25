@@ -11,6 +11,7 @@ that there are certain packages that must be installed:
 	
 * tkintermapview
 * customtkinter
+* pyperclip
 
 ## Usage
 
