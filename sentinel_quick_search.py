@@ -32,13 +32,13 @@ class Window(Frame):
         self.point_counter = 1 
 
 #       Logo Frame
-#        path = "sentinel_quick_search.gif"
-#        self.image = tk.PhotoImage(file=path)
-#        self.larger_image = self.image.zoom(2, 2)
-#        self.smaller_image = self.image.subsample(8, 8)
-#        self.logo = Label(
-#            master, image=self.smaller_image).pack(
-#            side=TOP, padx=5)
+        path = "sentinel_quick_search_logo.gif"
+        self.image = tk.PhotoImage(file=path)
+        self.larger_image = self.image.zoom(2, 2)
+        self.smaller_image = self.image.subsample(8, 8)
+        self.logo = Label(
+            master, image=self.smaller_image).pack(
+            side=TOP, padx=5)
         
         self.black_space_00 = Label(master, text="").pack(side=TOP, padx=5)
         
@@ -202,9 +202,7 @@ class Window(Frame):
         print("coordinates after transformation..")
         if len(self.coordinates) < 3:
             print("Cannot create polygon with less than three points..")
-        #geo_coordinates = [item for t in self.coordinates for item in t]
-        #print(geo_coordinates)
-        self.map_widget.create_polygon(self.coordinates)
+        self.map_widget.set_polygon(self.coordinates)
 
 
 if __name__ == "__main__":
