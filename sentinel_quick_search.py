@@ -47,8 +47,8 @@ class App(ctk.CTk):
         self.point_counter = 1
 
         # User inputs
-        self.password = "password"
-        self.username = "username"
+        self.username = tk.StringVar() 
+        self.password = tk.StringVar() 
         self.input_path = "" 
         self.output_folder = ""
         orbit_direction = "" 
@@ -112,15 +112,24 @@ class App(ctk.CTk):
                                                     command = self.create_polygon,
                                                     pass_coords=False)
 
-        self.user_name_entry = Entry(self.frame_left, width=20, justify="center")
-        self.user_name_entry.insert(END, self.username)
-        self.user_name_entry.place(relx=.5, rely=.1, anchor = CENTER)
-        self.user_name_entry.bind('<FocusIn>', self.clear_default)
+        self.user_name_entry = Entry(self.frame_left,
+                                    textvariable=self.username,
+                                    width=20,
+                                    justify="center")
         
-        self.password_entry = Entry(self.frame_left, width=20, justify="center")
-        self.password_entry.insert(END, self.password, show="*")
+        self.user_name_entry.insert(END, "username")
+        self.user_name_entry.place(relx=.5, rely=.1, anchor = CENTER)
+        self.user_name_entry.focus()
+        
+        self.password_entry = Entry(self.frame_left,
+                                    textvariable=self.password,
+                                    width=20,
+                                    justify="center",
+                                    show="*")
+
+        self.password_entry.insert(END, "password")
         self.password_entry.place(relx=.5, rely=.2, anchor=CENTER) 
-        self.password_entry.bind('<FocusIn>', self.clear_default)
+        self.password_entry.focus()
         
         self.search_button = ctk.CTkButton(
             self.frame_bottom,
@@ -132,6 +141,15 @@ class App(ctk.CTk):
             column=0,
             columnspan=1)
 
+        self.run_button = ctk.CTkButton(
+            self.frame_bottom,
+            text="Run Query",
+            command=self.run_query).grid(
+            padx=5,
+            pady=10,
+            row=2,
+            column=0,
+            columnspan=1)
 
         self.display_file = Entry(self.frame_bottom, width=80,
                                     bg="white" ,textvariable=self.out_geojson)
@@ -193,6 +211,12 @@ class App(ctk.CTk):
         else:
             self.update_path(close_path=True) 
             self.map_widget.set_polygon(self.coordinates)
+
+
+    def run_query(self): 
+        print(self.username.get())
+        print(self.password.get())
+
 
     def start(self):
         self.mainloop()
