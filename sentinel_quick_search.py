@@ -39,6 +39,7 @@ class App(ctk.CTk):
         self.title(App.APP_NAME)
         self.geometry(str(App.WIDTH) + "x" + str(App.HEIGHT))
         self.minsize(App.WIDTH, App.HEIGHT)
+        self.state("zoomed")
         self.folder = ""
         self.out_geojson = ""
         self.zip_files = []
@@ -94,12 +95,12 @@ class App(ctk.CTk):
 
         self.table_frame = ctk.CTkFrame(master = self, 
                                         corner_radius=5)
-        self.table_frame.grid(row=2,
-                                column = 1,
-                                padx=20,
-                                pady=5,
-                                sticky="nsew",
-                                columnspan=1)
+        #self.table_frame.grid(row=0,
+        #                        column = 2,
+        #                        padx=20,
+        #                        pady=5,
+        #                        sticky="nsew",
+        #                        columnspan=1)
         
         #  Map View and Map Functionalities
         self.map_widget = TkinterMapView(self.frame_right, 
@@ -239,9 +240,14 @@ class App(ctk.CTk):
         
 
         # Table Results 
+        #self.canvas_table = Canvas(self.table_frame, width=70, height=65, bg="#444444")
+        #self.canvas_table.place(relx=.5, rely=.55, anchor=CENTER)
+        #self.canvas_table.pack(fill=BOTH)
         df = TableModel.getSampleData()
+        print(df)
         self.table = pt = Table(self.table_frame, dataframe=df,
                                     showtoolbar=True, showstatusbar=True)
+        #pt.show()
 
     def sel(self):
         selection = "You selected the option " + str(self.platform.get())
