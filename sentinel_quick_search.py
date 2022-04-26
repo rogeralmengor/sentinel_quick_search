@@ -115,10 +115,12 @@ class App(ctk.CTk):
         self.user_name_entry = Entry(self.frame_left, width=20, justify="center")
         self.user_name_entry.insert(END, self.username)
         self.user_name_entry.place(relx=.5, rely=.1, anchor = CENTER)
+        self.user_name_entry.bind('<FocusIn>', self.clear_default)
         
         self.password_entry = Entry(self.frame_left, width=20, justify="center")
-        self.password_entry.insert(END, self.password)
+        self.password_entry.insert(END, self.password, show="*")
         self.password_entry.place(relx=.5, rely=.2, anchor=CENTER) 
+        self.password_entry.bind('<FocusIn>', self.clear_default)
         
         self.search_button = ctk.CTkButton(
             self.frame_bottom,
@@ -135,6 +137,10 @@ class App(ctk.CTk):
                                     bg="white" ,textvariable=self.out_geojson)
         self.display_file.grid(padx=5, pady=10, sticky="w", row=1, column=1)
 
+
+    def clear_default(self, event): 
+        event.widget.delete(0, 'end')
+        event.widget.unbind('<FocusIn>')
 
     def save_file(self):
         filename = filedialog.asksaveasfile(mode='w', defaultextension=".geojson").name
