@@ -18,7 +18,8 @@ import customtkinter as ctk
 from tkintermapview import TkinterMapView
 import math
 from tkinter import * 
-
+from tkcalendar import Calendar
+from pandastable import Table, TableModel
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
@@ -52,8 +53,9 @@ class App(ctk.CTk):
         self.input_path = "" 
         self.output_folder = ""
         orbit_direction = "" 
-        start_date = "" 
-        end_date = ""
+        self.start_date = "YYYY-MM-DD" 
+        self.end_date = "YYYY-MM-DD"
+        self.footprints_path = "" 
 
 
         # ================= CTkFrames ============================== # 
@@ -62,13 +64,15 @@ class App(ctk.CTk):
         self.grid_columnconfigure(0, weight = 1)
 
         self.frame_left = ctk.CTkFrame(master=self, 
-                                        width = 150)
+                                        width = 150, 
+                                        )
 
         self.frame_left.grid(row=0,
                             column=0,
                             padx=20,
                             pady=20,
-                            sticky="nsew")
+                            sticky="nsew",
+                            rowspan = 4)
 
         self.frame_right = ctk.CTkFrame(master=self, 
                                         corner_radius=10)
@@ -81,12 +85,21 @@ class App(ctk.CTk):
 
         self.frame_bottom = ctk.CTkFrame(master=self, 
                                         corner_radius=5)
-        self.frame_bottom.grid(row=2,
-                                column=0,
+        self.frame_bottom.grid(row=3,
+                                column=1,
                                 padx=20,
-                                pady=10,
+                                pady=5,
                                 sticky="nsew",
-                                columnspan=2)
+                                columnspan=1)
+
+        self.table_frame = ctk.CTkFrame(master = self, 
+                                        corner_radius=5)
+        self.table_frame.grid(row=2,
+                                column = 1,
+                                padx=20,
+                                pady=5,
+                                sticky="nsew",
+                                columnspan=1)
         
         #  Map View and Map Functionalities
         self.map_widget = TkinterMapView(self.frame_right, 
@@ -111,16 +124,24 @@ class App(ctk.CTk):
         self.map_widget.add_right_click_menu_command(label = "Create AOI",
                                                     command = self.create_polygon,
                                                     pass_coords=False)
+       
+        # Credentials Label 
 
+        # Label for platform type 
+        self.label_credentials = ctk.CTkLabel(self.frame_left, text = "Copernicus scihub\ncredentials")
+        self.label_credentials.place(relx=.5, rely=.1, anchor=CENTER)
+
+        # Setting user name Entry 
         self.user_name_entry = Entry(self.frame_left,
                                     textvariable=self.username,
                                     width=20,
                                     justify="center")
         
         self.user_name_entry.insert(END, "username")
-        self.user_name_entry.place(relx=.5, rely=.1, anchor = CENTER)
+        self.user_name_entry.place(relx=.5, rely=.2, anchor = CENTER)
         self.user_name_entry.focus()
-        
+       
+        # Settings password's Entry 
         self.password_entry = Entry(self.frame_left,
                                     textvariable=self.password,
                                     width=20,
@@ -128,9 +149,11 @@ class App(ctk.CTk):
                                     show="*")
 
         self.password_entry.insert(END, "password")
-        self.password_entry.place(relx=.5, rely=.2, anchor=CENTER) 
+        self.password_entry.place(relx=.5, rely=.3, anchor=CENTER) 
         self.password_entry.focus()
-        
+       
+
+       # Setting buttons
         self.search_button = ctk.CTkButton(
             self.frame_bottom,
             text="Open..",
@@ -151,19 +174,83 @@ class App(ctk.CTk):
             column=0,
             columnspan=1)
 
-        self.display_file = Entry(self.frame_bottom, width=80,
+        self.display_file = Entry(self.frame_bottom, width=100,
                                     bg="white" ,textvariable=self.out_geojson)
+
         self.display_file.grid(padx=5, pady=10, sticky="w", row=1, column=1)
 
+        # Label for platform type 
+        self.label_platform_type = ctk.CTkLabel(self.frame_left, text = "Platform Type")
+        self.label_platform_type.place(relx=.5, rely=.4, anchor=CENTER)
 
-    def clear_default(self, event): 
-        event.widget.delete(0, 'end')
-        event.widget.unbind('<FocusIn>')
+        # Canvas for radio button
+        self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
+        self.canvas_platforms.place(relx=.5, rely=.55, anchor=CENTER)
+
+        # RadioButtons 
+        self.platform = IntVar()
+        self.S1 = Radiobutton(self.canvas_platforms,
+                                text="S-1",
+                                variable=self.platform,
+                                value=1,
+                                command=self.sel, 
+                                activeforeground="#000000",
+                                bg="#444444", 
+                                fg='#fff', 
+                                relief=tk.FLAT,
+                                bd=0,
+                                selectcolor="#444444")
+        self.S1.place(relx=.5, rely=.3, anchor = CENTER)
+
+        self.S2 = Radiobutton(self.canvas_platforms,
+                                text="S-2",
+                                variable=self.platform,
+                                value=2,
+                                command=self.sel,
+                                activeforeground="#000000",
+                                bg="#444444",
+                                fg='#fff',
+                                relief=tk.FLAT,
+                                bd=0,
+                                selectcolor="#444444")
+        self.S2.place(relx=.5, rely=.65, anchor = CENTER)
+
+        # Add Calendar
+        self.start_cal = Calendar(self.frame_left, selectmode = 'day',
+                        year = 2020, month = 5,
+                        day = 22)
+
+        # Start Date  
+        self.label_start_date = ctk.CTkLabel(self.frame_left, text = "Start Date")
+        self.label_start_date.place(relx=.5, rely=.75, anchor=CENTER)
+        self.button_start_date = ctk.CTkButton(self.frame_left,
+                                    text = "YYYY-MM-DD",
+                                    width=20)
+        self.button_start_date.place(relx=.5, rely=.85, anchor = CENTER)
+
+        # End Date
+        self.label_end_date = ctk.CTkLabel(self.frame_left, text = "End Date")
+        self.label_end_date.place(relx=.5, rely=.95, anchor=CENTER)
+        self.button_end_date = ctk.CTkButton(self.frame_left,
+                                    text = "YYYY-MM-DD",
+                                    width=20)
+
+        self.button_end_date.place(relx=.5, rely=1.05, anchor = CENTER)
+        
+
+        # Table Results 
+        df = TableModel.getSampleData()
+        self.table = pt = Table(self.table_frame, dataframe=df,
+                                    showtoolbar=True, showstatusbar=True)
+
+    def sel(self):
+        selection = "You selected the option " + str(self.platform.get())
+        print(selection)
 
     def save_file(self):
-        filename = filedialog.asksaveasfile(mode='w', defaultextension=".geojson").name
+        self.footprints_path = filedialog.asksaveasfile(mode='w', defaultextension=".geojson").name
         self.display_file.delete(0, END)
-        self.display_file.insert(0, filename)
+        self.display_file.insert(0, self.footprints_path)
 
 
     def update_path(self, close_path=False):
