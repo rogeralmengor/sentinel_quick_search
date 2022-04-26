@@ -86,15 +86,17 @@ class App(ctk.CTk):
 
         self.frame_bottom = ctk.CTkFrame(master=self, 
                                         corner_radius=5)
-        self.frame_bottom.grid(row=3,
+        self.frame_bottom.grid(row=1,
                                 column=1,
                                 padx=20,
                                 pady=5,
                                 sticky="nsew",
                                 columnspan=1)
 
-        self.table_frame = ctk.CTkFrame(master = self, 
-                                        corner_radius=5)
+        #self.table_frame = ctk.CTkFrame(master = self, 
+        #                                corner_radius=5)
+
+
         #self.table_frame.grid(row=0,
         #                        column = 2,
         #                        padx=20,
@@ -104,7 +106,7 @@ class App(ctk.CTk):
         
         #  Map View and Map Functionalities
         self.map_widget = TkinterMapView(self.frame_right, 
-                                        width=500, 
+                                        width=900, 
                                         height=250, 
                                         corner_radius=10, 
                                         relief=SUNKEN,
@@ -129,8 +131,9 @@ class App(ctk.CTk):
         # Credentials Label 
 
         # Label for platform type 
-        self.label_credentials = ctk.CTkLabel(self.frame_left, text = "Copernicus scihub\ncredentials")
-        self.label_credentials.place(relx=.5, rely=.1, anchor=CENTER)
+        self.label_credentials = ctk.CTkLabel(self.frame_left, 
+                                            text = "Copernicus scihub\ncredentials")
+        self.label_credentials.place(relx=.5, rely=.05, anchor=CENTER)
 
         # Setting user name Entry 
         self.user_name_entry = Entry(self.frame_left,
@@ -139,7 +142,7 @@ class App(ctk.CTk):
                                     justify="center")
         
         self.user_name_entry.insert(END, "username")
-        self.user_name_entry.place(relx=.5, rely=.2, anchor = CENTER)
+        self.user_name_entry.place(relx=.5, rely=.15, anchor = CENTER)
         self.user_name_entry.focus()
        
         # Settings password's Entry 
@@ -150,7 +153,7 @@ class App(ctk.CTk):
                                     show="*")
 
         self.password_entry.insert(END, "password")
-        self.password_entry.place(relx=.5, rely=.3, anchor=CENTER) 
+        self.password_entry.place(relx=.5, rely=.25, anchor=CENTER) 
         self.password_entry.focus()
        
 
@@ -175,18 +178,18 @@ class App(ctk.CTk):
             column=0,
             columnspan=1)
 
-        self.display_file = Entry(self.frame_bottom, width=100,
+        self.display_file = Entry(self.frame_bottom, width=140,
                                     bg="white" ,textvariable=self.out_geojson)
 
         self.display_file.grid(padx=5, pady=10, sticky="w", row=1, column=1)
 
         # Label for platform type 
         self.label_platform_type = ctk.CTkLabel(self.frame_left, text = "Platform Type")
-        self.label_platform_type.place(relx=.5, rely=.4, anchor=CENTER)
+        self.label_platform_type.place(relx=.5, rely=.325, anchor=CENTER)
 
         # Canvas for radio button
         self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
-        self.canvas_platforms.place(relx=.5, rely=.55, anchor=CENTER)
+        self.canvas_platforms.place(relx=.5, rely=.45, anchor=CENTER)
 
         # RadioButtons 
         self.platform = IntVar()
@@ -223,20 +226,19 @@ class App(ctk.CTk):
 
         # Start Date  
         self.label_start_date = ctk.CTkLabel(self.frame_left, text = "Start Date")
-        self.label_start_date.place(relx=.5, rely=.75, anchor=CENTER)
+        self.label_start_date.place(relx=.5, rely=.60, anchor=CENTER)
         self.button_start_date = ctk.CTkButton(self.frame_left,
                                     text = "YYYY-MM-DD",
                                     width=20)
-        self.button_start_date.place(relx=.5, rely=.85, anchor = CENTER)
+        self.button_start_date.place(relx=.5, rely=.675, anchor = CENTER)
 
         # End Date
         self.label_end_date = ctk.CTkLabel(self.frame_left, text = "End Date")
-        self.label_end_date.place(relx=.5, rely=.95, anchor=CENTER)
+        self.label_end_date.place(relx=.5, rely=.75, anchor=CENTER)
         self.button_end_date = ctk.CTkButton(self.frame_left,
                                     text = "YYYY-MM-DD",
                                     width=20)
-
-        self.button_end_date.place(relx=.5, rely=1.05, anchor = CENTER)
+        self.button_end_date.place(relx=.5, rely=.825, anchor = CENTER)
         
 
         # Table Results 
@@ -245,13 +247,41 @@ class App(ctk.CTk):
         #self.canvas_table.pack(fill=BOTH)
         df = TableModel.getSampleData()
         print(df)
-        self.table = pt = Table(self.table_frame, dataframe=df,
-                                    showtoolbar=True, showstatusbar=True)
+        #self.table = pt = Table(self.table_frame, dataframe=df,
+        #                            showtoolbar=True, showstatusbar=True)
         #pt.show()
 
     def sel(self):
         selection = "You selected the option " + str(self.platform.get())
         print(selection)
+        # Label sensing mode 
+        if str(self.platform.get()) == "1":
+            self.sensor_specifics_frame = ctk.CTkFrame(master = self, 
+                                                    corner_radius=10)
+
+            self.sensor_specifics_frame.grid(row=4,
+                                column = 0,
+                                padx=20,
+                                pady=5,
+                                sticky="nsew",
+                                columnspan=1)
+
+            self.s1_sensing_mode = ctk.CTkLabel(self.sensor_specifics_frame, text = "S-1 Extra Parameters")
+            self.s1_sensing_mode.place(relx=.5, rely=.1, anchor=CENTER)
+
+        if str(self.platform.get()) == "2":
+            self.sensor_specifics_frame = ctk.CTkFrame(master = self, 
+                                                    corner_radius=10)
+
+            self.sensor_specifics_frame.grid(row=4,
+                                column = 0,
+                                padx=20,
+                                pady=5,
+                                sticky="nsew",
+                                columnspan=1)
+
+            self.s1_sensing_mode = ctk.CTkLabel(self.sensor_specifics_frame, text = "S-2 Extra Parameters")
+            self.s1_sensing_mode.place(relx=.5, rely=.1, anchor=CENTER)
 
     def save_file(self):
         self.footprints_path = filedialog.asksaveasfile(mode='w', defaultextension=".geojson").name
