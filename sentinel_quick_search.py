@@ -114,13 +114,11 @@ class App(ctk.CTk):
 
         self.user_name_entry = Entry(self.frame_left, width=20, justify="center")
         self.user_name_entry.insert(END, self.username)
+        self.user_name_entry.place(relx=.5, rely=.1, anchor = CENTER)
+        
         self.password_entry = Entry(self.frame_left, width=20, justify="center")
         self.password_entry.insert(END, self.password)
-        #self.password_entry.grid(padx=5, pady=10, sticky="nswe", row=0, column=0)
-        #self.password_entry.place(anchor = CENTER)
-        #self.user_name_entry.grid(padx=5, pady=10, sticky="nswe", row=1, column=0)
-        #self.user_name_entry.place(anchor = CENTER)
-        #self.user_name_entry.place(relx=.5, rely=.5, anchor = CENTER)
+        self.password_entry.place(relx=.5, rely=.2, anchor=CENTER) 
         
         self.search_button = ctk.CTkButton(
             self.frame_bottom,
