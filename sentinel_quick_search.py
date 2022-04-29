@@ -20,6 +20,8 @@ import math
 from tkinter import * 
 from tkcalendar import Calendar
 from pandastable import Table, TableModel
+from tkinter import filedialog
+from tkinter import ttk
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
@@ -57,6 +59,7 @@ class App(ctk.CTk):
         self.start_date = "YYYY-MM-DD" 
         self.end_date = "YYYY-MM-DD"
         self.footprints_path = "" 
+        self.current_cloud_cover_value = tk.DoubleVar()
 
 
         # ================= CTkFrames ============================== # 
@@ -239,17 +242,7 @@ class App(ctk.CTk):
                                     text = "YYYY-MM-DD",
                                     width=20)
         self.button_end_date.place(relx=.5, rely=.825, anchor = CENTER)
-        
 
-        # Table Results 
-        #self.canvas_table = Canvas(self.table_frame, width=70, height=65, bg="#444444")
-        #self.canvas_table.place(relx=.5, rely=.55, anchor=CENTER)
-        #self.canvas_table.pack(fill=BOTH)
-        df = TableModel.getSampleData()
-        print(df)
-        #self.table = pt = Table(self.table_frame, dataframe=df,
-        #                            showtoolbar=True, showstatusbar=True)
-        #pt.show()
 
     def sel(self):
         selection = "You selected the option " + str(self.platform.get())
@@ -266,8 +259,80 @@ class App(ctk.CTk):
                                 sticky="nsew",
                                 columnspan=1)
 
-            self.s1_sensing_mode = ctk.CTkLabel(self.sensor_specifics_frame, text = "S-1 Extra Parameters")
+            self.s1_sensing_mode = ctk.CTkLabel(self.sensor_specifics_frame,
+                                text = "S-1 Extra Parameters")
             self.s1_sensing_mode.place(relx=.5, rely=.1, anchor=CENTER)
+            self.s1_ = ctk.CTkLabel(self.sensor_specifics_frame, text = "====================")
+            self.s1_.place(relx=.5, rely=.2, anchor=CENTER) 
+
+            self.orbit_label =ctk.CTkLabel(self.sensor_specifics_frame, text = "Orbit Direction") 
+            self.orbit_label.place(relx=.5, rely=.3, anchor=CENTER)
+
+        # Canvas for radio button orbit type
+        self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
+        self.canvas_platforms.place(relx=.5, rely=.45, anchor=CENTER)
+
+        # RadioButtons 
+        self.platform = IntVar()
+        self.S1 = Radiobutton(self.canvas_platforms,
+                                text="S-1",
+                                variable=self.platform,
+                                value=1,
+                                command=self.sel, 
+                                activeforeground="#000000",
+                                bg="#444444", 
+                                fg='#fff', 
+                                relief=tk.FLAT,
+                                bd=0,
+                                selectcolor="#444444")
+        self.S1.place(relx=.5, rely=.3, anchor = CENTER)
+
+        self.S2 = Radiobutton(self.canvas_platforms,
+                                text="S-2",
+                                variable=self.platform,
+                                value=2,
+                                command=self.sel,
+                                activeforeground="#000000",
+                                bg="#444444",
+                                fg='#fff',
+                                relief=tk.FLAT,
+                                bd=0,
+                                selectcolor="#444444")
+        self.S2.place(relx=.5, rely=.65, anchor = CENTER)
+            self.product_type_label =ctk.CTkLabel(self.sensor_specifics_frame, text = "Product Type") 
+            self.product_type_label.place(relx=.5, rely=.4, anchor=CENTER)
+
+        # Canvas for radio button platform type 
+        self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
+        self.canvas_platforms.place(relx=.5, rely=.45, anchor=CENTER)
+
+        # RadioButtons 
+        self.platform = IntVar()
+        self.S1 = Radiobutton(self.canvas_platforms,
+                                text="S-1",
+                                variable=self.platform,
+                                value=1,
+                                command=self.sel, 
+                                activeforeground="#000000",
+                                bg="#444444", 
+                                fg='#fff', 
+                                relief=tk.FLAT,
+                                bd=0,
+                                selectcolor="#444444")
+        self.S1.place(relx=.5, rely=.3, anchor = CENTER)
+
+        self.S2 = Radiobutton(self.canvas_platforms,
+                                text="S-2",
+                                variable=self.platform,
+                                value=2,
+                                command=self.sel,
+                                activeforeground="#000000",
+                                bg="#444444",
+                                fg='#fff',
+                                relief=tk.FLAT,
+                                bd=0,
+                                selectcolor="#444444")
+        self.S2.place(relx=.5, rely=.65, anchor = CENTER)
 
         if str(self.platform.get()) == "2":
             self.sensor_specifics_frame = ctk.CTkFrame(master = self, 
@@ -280,8 +345,33 @@ class App(ctk.CTk):
                                 sticky="nsew",
                                 columnspan=1)
 
-            self.s1_sensing_mode = ctk.CTkLabel(self.sensor_specifics_frame, text = "S-2 Extra Parameters")
-            self.s1_sensing_mode.place(relx=.5, rely=.1, anchor=CENTER)
+            self.s2_sensing_mode = ctk.CTkLabel(self.sensor_specifics_frame, text = "S-2 Extra Parameters")
+            self.s2_sensing_mode.place(relx=.5, rely=.1, anchor=CENTER) 
+            self.s2_ = ctk.CTkLabel(self.sensor_specifics_frame, text = "====================")
+            self.s2_.place(relx=.5, rely=.2, anchor=CENTER) 
+            
+            self.cloud_cover_label =ctk.CTkLabel(self.sensor_specifics_frame, text = "Cloud Cover") 
+            self.cloud_cover_label.place(relx=.5, rely=.3, anchor=CENTER)
+            self.slider = ttk.Scale(
+                self.sensor_specifics_frame,
+                from_=0,
+                to=100,
+                orient='horizontal',
+                variable=self.current_cloud_cover_value,
+                command=self.slider_changed,
+                length=100
+                )
+            self.slider.place(relx=.5, rely=.425, anchor = CENTER)
+            self.slider_current_value_label = ctk.CTkLabel(self.sensor_specifics_frame,
+                                                            text=self.get_current_cc_value())
+            self.slider_current_value_label.place(relx=.5, rely=.55, anchor=CENTER)
+
+    def get_current_cc_value(self):
+        return '{: .2f}'.format(self.current_cloud_cover_value.get())
+
+    def slider_changed(self, event):  
+        #self.current_cloud_cover_value = self.slider.get()
+        self.slider_current_value_label.configure(text=self.get_current_cc_value())  
 
     def save_file(self):
         self.footprints_path = filedialog.asksaveasfile(mode='w', defaultextension=".geojson").name
