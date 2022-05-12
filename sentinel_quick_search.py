@@ -62,7 +62,7 @@ class App(ctk.CTk):
         self.current_cloud_cover_value = tk.DoubleVar()
 
 
-        # ================= CTkFrames ============================== # 
+        # =============================================== MAIN FRAMES ======================================#
         self.grid_columnconfigure(0, weight = 0)
         self.grid_columnconfigure(1, weight = 1)
         self.grid_columnconfigure(0, weight = 1)
@@ -106,8 +106,8 @@ class App(ctk.CTk):
         #                        pady=5,
         #                        sticky="nsew",
         #                        columnspan=1)
-        
-        #  Map View and Map Functionalities
+
+        #============================== MAP VIEW ===================================================== 
         self.map_widget = TkinterMapView(self.frame_right, 
                                         width=900, 
                                         height=250, 
@@ -131,14 +131,14 @@ class App(ctk.CTk):
                                                     command = self.create_polygon,
                                                     pass_coords=False)
        
-        # Credentials Label 
+        # ==================== Credentials Label ================================
 
         # Label for platform type 
         self.label_credentials = ctk.CTkLabel(self.frame_left, 
                                             text = "Copernicus scihub\ncredentials")
         self.label_credentials.place(relx=.5, rely=.05, anchor=CENTER)
 
-        # Setting user name Entry 
+        # User name Entry 
         self.user_name_entry = Entry(self.frame_left,
                                     textvariable=self.username,
                                     width=20,
@@ -148,7 +148,7 @@ class App(ctk.CTk):
         self.user_name_entry.place(relx=.5, rely=.15, anchor = CENTER)
         self.user_name_entry.focus()
        
-        # Settings password's Entry 
+        # Password's Entry 
         self.password_entry = Entry(self.frame_left,
                                     textvariable=self.password,
                                     width=20,
@@ -159,33 +159,6 @@ class App(ctk.CTk):
         self.password_entry.place(relx=.5, rely=.25, anchor=CENTER) 
         self.password_entry.focus()
        
-
-       # Setting buttons
-        self.search_button = ctk.CTkButton(
-            self.frame_bottom,
-            text="Open..",
-            command=self.save_file).grid(
-            padx=5,
-            pady=10,
-            row=1,
-            column=0,
-            columnspan=1)
-
-        self.run_button = ctk.CTkButton(
-            self.frame_bottom,
-            text="Run Query",
-            command=self.run_query).grid(
-            padx=5,
-            pady=10,
-            row=2,
-            column=0,
-            columnspan=1)
-
-        self.display_file = Entry(self.frame_bottom, width=140,
-                                    bg="white" ,textvariable=self.out_geojson)
-
-        self.display_file.grid(padx=5, pady=10, sticky="w", row=1, column=1)
-
         # Label for platform type 
         self.label_platform_type = ctk.CTkLabel(self.frame_left, text = "Platform Type")
         self.label_platform_type.place(relx=.5, rely=.325, anchor=CENTER)
@@ -193,6 +166,27 @@ class App(ctk.CTk):
         # Canvas for radio button
         self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
         self.canvas_platforms.place(relx=.5, rely=.45, anchor=CENTER)
+
+        # Add Calendar
+        self.start_cal = Calendar(self.frame_left, selectmode = 'day',
+                        year = 2020, month = 5,
+                        day = 22)
+
+        # Start Date  
+        self.label_start_date = ctk.CTkLabel(self.frame_left, text = "Start Date")
+        self.label_start_date.place(relx=.5, rely=.60, anchor=CENTER)
+        self.button_start_date = ctk.CTkButton(self.frame_left,
+                                    text = "YYYY-MM-DD",
+                                    width=20)
+        self.button_start_date.place(relx=.5, rely=.675, anchor = CENTER)
+
+        # End Date
+        self.label_end_date = ctk.CTkLabel(self.frame_left, text = "End Date")
+        self.label_end_date.place(relx=.5, rely=.75, anchor=CENTER)
+        self.button_end_date = ctk.CTkButton(self.frame_left,
+                                    text = "YYYY-MM-DD",
+                                    width=20)
+        self.button_end_date.place(relx=.5, rely=.825, anchor = CENTER)
 
         # RadioButtons 
         self.platform = IntVar()
@@ -221,27 +215,31 @@ class App(ctk.CTk):
                                 bd=0,
                                 selectcolor="#444444")
         self.S2.place(relx=.5, rely=.65, anchor = CENTER)
+       
+       # =========================== Setting buttons ==============================
+        self.search_button = ctk.CTkButton(
+            self.frame_bottom,
+            text="Open..",
+            command=self.save_file).grid(
+            padx=5,
+            pady=10,
+            row=1,
+            column=0,
+            columnspan=1)
 
-        # Add Calendar
-        self.start_cal = Calendar(self.frame_left, selectmode = 'day',
-                        year = 2020, month = 5,
-                        day = 22)
+        self.run_button = ctk.CTkButton(
+            self.frame_bottom,
+            text="Run Query",
+            command=self.run_query).grid(
+            padx=5,
+            pady=10,
+            row=2,
+            column=0,
+            columnspan=1)
 
-        # Start Date  
-        self.label_start_date = ctk.CTkLabel(self.frame_left, text = "Start Date")
-        self.label_start_date.place(relx=.5, rely=.60, anchor=CENTER)
-        self.button_start_date = ctk.CTkButton(self.frame_left,
-                                    text = "YYYY-MM-DD",
-                                    width=20)
-        self.button_start_date.place(relx=.5, rely=.675, anchor = CENTER)
-
-        # End Date
-        self.label_end_date = ctk.CTkLabel(self.frame_left, text = "End Date")
-        self.label_end_date.place(relx=.5, rely=.75, anchor=CENTER)
-        self.button_end_date = ctk.CTkButton(self.frame_left,
-                                    text = "YYYY-MM-DD",
-                                    width=20)
-        self.button_end_date.place(relx=.5, rely=.825, anchor = CENTER)
+        self.display_file = Entry(self.frame_bottom, width=140,
+                                    bg="white" ,textvariable=self.out_geojson)
+        self.display_file.grid(padx=5, pady=10, sticky="w", row=1, column=1)
 
 
     def sel(self):
@@ -299,8 +297,8 @@ class App(ctk.CTk):
                                 bd=0,
                                 selectcolor="#444444")
         self.S2.place(relx=.5, rely=.65, anchor = CENTER)
-            self.product_type_label =ctk.CTkLabel(self.sensor_specifics_frame, text = "Product Type") 
-            self.product_type_label.place(relx=.5, rely=.4, anchor=CENTER)
+        self.product_type_label =ctk.CTkLabel(self.sensor_specifics_frame, text = "Product Type") 
+        self.product_type_label.place(relx=.5, rely=.4, anchor=CENTER)
 
         # Canvas for radio button platform type 
         self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
@@ -365,6 +363,10 @@ class App(ctk.CTk):
             self.slider_current_value_label = ctk.CTkLabel(self.sensor_specifics_frame,
                                                             text=self.get_current_cc_value())
             self.slider_current_value_label.place(relx=.5, rely=.55, anchor=CENTER)
+
+
+    #============================================= FUNCITONS ======================================================#
+
 
     def get_current_cc_value(self):
         return '{: .2f}'.format(self.current_cloud_cover_value.get())
