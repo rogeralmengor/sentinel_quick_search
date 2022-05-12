@@ -24,7 +24,7 @@ from tkinter import filedialog
 from tkinter import ttk
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
-
+from utils import *
 
 class App(ctk.CTk):
 
@@ -55,8 +55,6 @@ class App(ctk.CTk):
         self.input_path = "" 
         self.output_folder = ""
         orbit_direction = "" 
-        self.start_date = "YYYY-MM-DD" 
-        self.end_date = "YYYY-MM-DD"
         self.footprints_path = "" 
         self.current_cloud_cover_value = tk.DoubleVar()
 
@@ -169,15 +167,26 @@ class App(ctk.CTk):
 
         #=============================== CALENDER VIEWS ====================================
         from tkcalendar import DateEntry
+
+        # Calender variables 
+        self.start_date = tk.StringVar()  
+        self.end_date = tk.StringVar() 
+
         # Start Date Calendar  
         self.label_start_date = ctk.CTkLabel(self.frame_left, text = "Start Date")
         self.label_start_date.place(relx=.5, rely=.60, anchor=CENTER)
-        self.start_cal = DateEntry(self.frame_left, selectmode = 'day')
+        self.start_cal = DateEntry(self.frame_left, selectmode = 'day', textvariable=self.start_date)
         self.start_cal.place(relx=.5, rely=.65, anchor=CENTER)
 
         # End Date Calender
         self.label_end_date = ctk.CTkLabel(self.frame_left, text = "End Date")
         self.label_end_date.place(relx=.5, rely=.70, anchor=CENTER)
+        self.end_cal = DateEntry(self.frame_left, selectmode = 'day', textvariable=self.end_date)
+        self.end_cal.place(relx=.5, rely=.75, anchor=CENTER)
+        
+        # Tracing variables
+        self.start_date.trace('w', self.update_start_date) 
+        self.end_date.trace('w', self.update_end_date)
 
         # ============================== PLATFORM BUTTONS =============================== # 
 
@@ -363,6 +372,18 @@ class App(ctk.CTk):
         self.display_file.delete(0, END)
         self.display_file.insert(0, self.footprints_path)
 
+    def update_start_date(self, *args): 
+        print(self.start_date.get())
+        #stf = dt.strftime("%Y%m%d")
+        #self.start_date_for_api = stf 
+        #print("string for api - startdate" + self.start_date_for_api) 
+
+    def update_end_date(self, *args):
+        print(self.end_date.get())
+        #dt = self.end_cal.get_date()
+        #stf = dt.strftime("%Y%m%d")
+        #self.end_date_for_api = stf 
+        #print("string for api - enddate" + self.end_date_for_api)
 
     def update_path(self, close_path=False):
 
