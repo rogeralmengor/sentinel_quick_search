@@ -168,27 +168,16 @@ class App(ctk.CTk):
 
 
         #=============================== CALENDER VIEWS ====================================
-
-        # Add Calendar
-        self.start_cal = Calendar(self.frame_left, selectmode = 'day',
-                        year = 2020, month = 5,
-                        day = 22)
-
-        # Start Date  
+        from tkcalendar import DateEntry
+        # Start Date Calendar  
         self.label_start_date = ctk.CTkLabel(self.frame_left, text = "Start Date")
         self.label_start_date.place(relx=.5, rely=.60, anchor=CENTER)
-        self.button_start_date = ctk.CTkButton(self.frame_left,
-                                    text = "YYYY-MM-DD",
-                                    width=20)
-        self.button_start_date.place(relx=.5, rely=.675, anchor = CENTER)
+        self.start_cal = DateEntry(self.frame_left, selectmode = 'day')
+        self.start_cal.place(relx=.5, rely=.65, anchor=CENTER)
 
-        # End Date
+        # End Date Calender
         self.label_end_date = ctk.CTkLabel(self.frame_left, text = "End Date")
-        self.label_end_date.place(relx=.5, rely=.75, anchor=CENTER)
-        self.button_end_date = ctk.CTkButton(self.frame_left,
-                                    text = "YYYY-MM-DD",
-                                    width=20)
-        self.button_end_date.place(relx=.5, rely=.825, anchor = CENTER)
+        self.label_end_date.place(relx=.5, rely=.70, anchor=CENTER)
 
         # ============================== PLATFORM BUTTONS =============================== # 
 
