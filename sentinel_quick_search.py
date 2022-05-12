@@ -22,7 +22,6 @@ from tkcalendar import Calendar
 from pandastable import Table, TableModel
 from tkinter import filedialog
 from tkinter import ttk
-
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("green")
 
@@ -167,6 +166,9 @@ class App(ctk.CTk):
         self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
         self.canvas_platforms.place(relx=.5, rely=.45, anchor=CENTER)
 
+
+        #=============================== CALENDER VIEWS ====================================
+
         # Add Calendar
         self.start_cal = Calendar(self.frame_left, selectmode = 'day',
                         year = 2020, month = 5,
@@ -187,6 +189,8 @@ class App(ctk.CTk):
                                     text = "YYYY-MM-DD",
                                     width=20)
         self.button_end_date.place(relx=.5, rely=.825, anchor = CENTER)
+
+        # ============================== PLATFORM BUTTONS =============================== # 
 
         # RadioButtons 
         self.platform = IntVar()
@@ -243,13 +247,18 @@ class App(ctk.CTk):
 
 
     def sel(self):
+        
         selection = "You selected the option " + str(self.platform.get())
         print(selection)
+        
         # Label sensing mode 
+        # Canvas for radio button orbit type
+        self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
+        self.canvas_platforms.place(relx=.5, rely=.45, anchor=CENTER)
+        
         if str(self.platform.get()) == "1":
             self.sensor_specifics_frame = ctk.CTkFrame(master = self, 
                                                     corner_radius=10)
-
             self.sensor_specifics_frame.grid(row=4,
                                 column = 0,
                                 padx=20,
@@ -266,13 +275,7 @@ class App(ctk.CTk):
             self.orbit_label =ctk.CTkLabel(self.sensor_specifics_frame, text = "Orbit Direction") 
             self.orbit_label.place(relx=.5, rely=.3, anchor=CENTER)
 
-        # Canvas for radio button orbit type
-        self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
-        self.canvas_platforms.place(relx=.5, rely=.45, anchor=CENTER)
-
-        # RadioButtons 
-        self.platform = IntVar()
-        self.S1 = Radiobutton(self.canvas_platforms,
+            self.S1 = Radiobutton(self.canvas_platforms,
                                 text="S-1",
                                 variable=self.platform,
                                 value=1,
@@ -283,9 +286,9 @@ class App(ctk.CTk):
                                 relief=tk.FLAT,
                                 bd=0,
                                 selectcolor="#444444")
-        self.S1.place(relx=.5, rely=.3, anchor = CENTER)
+            self.S1.place(relx=.5, rely=.3, anchor = CENTER)
 
-        self.S2 = Radiobutton(self.canvas_platforms,
+            self.S2 = Radiobutton(self.canvas_platforms,
                                 text="S-2",
                                 variable=self.platform,
                                 value=2,
@@ -296,41 +299,8 @@ class App(ctk.CTk):
                                 relief=tk.FLAT,
                                 bd=0,
                                 selectcolor="#444444")
-        self.S2.place(relx=.5, rely=.65, anchor = CENTER)
-        self.product_type_label =ctk.CTkLabel(self.sensor_specifics_frame, text = "Product Type") 
-        self.product_type_label.place(relx=.5, rely=.4, anchor=CENTER)
+            self.S2.place(relx=.5, rely=.65, anchor = CENTER)
 
-        # Canvas for radio button platform type 
-        self.canvas_platforms = Canvas(self.frame_left, width=70, height=65, bg="#444444")
-        self.canvas_platforms.place(relx=.5, rely=.45, anchor=CENTER)
-
-        # RadioButtons 
-        self.platform = IntVar()
-        self.S1 = Radiobutton(self.canvas_platforms,
-                                text="S-1",
-                                variable=self.platform,
-                                value=1,
-                                command=self.sel, 
-                                activeforeground="#000000",
-                                bg="#444444", 
-                                fg='#fff', 
-                                relief=tk.FLAT,
-                                bd=0,
-                                selectcolor="#444444")
-        self.S1.place(relx=.5, rely=.3, anchor = CENTER)
-
-        self.S2 = Radiobutton(self.canvas_platforms,
-                                text="S-2",
-                                variable=self.platform,
-                                value=2,
-                                command=self.sel,
-                                activeforeground="#000000",
-                                bg="#444444",
-                                fg='#fff',
-                                relief=tk.FLAT,
-                                bd=0,
-                                selectcolor="#444444")
-        self.S2.place(relx=.5, rely=.65, anchor = CENTER)
 
         if str(self.platform.get()) == "2":
             self.sensor_specifics_frame = ctk.CTkFrame(master = self, 
@@ -364,9 +334,33 @@ class App(ctk.CTk):
                                                             text=self.get_current_cc_value())
             self.slider_current_value_label.place(relx=.5, rely=.55, anchor=CENTER)
 
+            self.S1 = Radiobutton(self.canvas_platforms,
+                                text="S-1",
+                                variable=self.platform,
+                                value=1,
+                                command=self.sel, 
+                                activeforeground="#000000",
+                                bg="#444444", 
+                                fg='#fff', 
+                                relief=tk.FLAT,
+                                bd=0,
+                                selectcolor="#444444")
+            self.S1.place(relx=.5, rely=.3, anchor = CENTER)
+
+            self.S2 = Radiobutton(self.canvas_platforms,
+                                text="S-2",
+                                variable=self.platform,
+                                value=2,
+                                command=self.sel,
+                                activeforeground="#000000",
+                                bg="#444444",
+                                fg='#fff',
+                                relief=tk.FLAT,
+                                bd=0,
+                                selectcolor="#444444")
+            self.S2.place(relx=.5, rely=.65, anchor = CENTER)
 
     #============================================= FUNCITONS ======================================================#
-
 
     def get_current_cc_value(self):
         return '{: .2f}'.format(self.current_cloud_cover_value.get())
