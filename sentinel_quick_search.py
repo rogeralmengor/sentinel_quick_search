@@ -1,4 +1,5 @@
 import os
+import re
 from turtle import update
 from zipfile import ZipFile
 import tkinter as tk
@@ -374,6 +375,7 @@ class App(ctk.CTk):
 
     def update_start_date(self, *args): 
         print(self.start_date.get())
+        print(reverse_year_in_date( modify_year_in_date(self.start_date.get())))
         #stf = dt.strftime("%Y%m%d")
         #self.start_date_for_api = stf 
         #print("string for api - startdate" + self.start_date_for_api) 
